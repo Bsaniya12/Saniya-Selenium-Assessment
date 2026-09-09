@@ -25,7 +25,7 @@ public class FacebookTestCase2 {
 		String beforeProperty=email.getDomProperty("value");
 		System.out.println(beforeAttribute);
 		System.out.println(beforeProperty);
-		email.sendKeys("mallu123@gmail.com");
+		email.sendKeys("saniya07@gmail.com");
 		String afterAttribute=email.getDomAttribute("value");
 		String afterProperty=email.getDomProperty("value");
 		System.out.println(afterAttribute);
