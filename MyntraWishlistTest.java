@@ -9,7 +9,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-public class MyntraWishlistTest {
+public class Day1_Assessment/MyntraWishlistTest {
 
 	public static void main(String[] args) throws InterruptedException 
 	{
