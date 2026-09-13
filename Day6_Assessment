@@ -1,1 +1,200 @@
+package testcase1;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.time.Duration;
+import java.util.Properties;
+
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class Day6_testcase1 {
+
+    public static void main(String[] args) throws IOException {
+
+        // Reading data from properties file
+        FileInputStream f = new FileInputStream(
+                "./src/test/resources/DDT/Day6_testcase1.properties");
+
+        Properties p = new Properties();
+        p.load(f);
+
+        String browser = p.getProperty("browser");
+        String url = p.getProperty("url");
+        String un = p.getProperty("username");
+        String pw = p.getProperty("password");
+
+        System.out.println(browser);
+        System.out.println(url);
+        System.out.println(un);
+        System.out.println(pw);
+
+        f.close();
+
+        // Reading data from Excel file
+        FileInputStream f1 = new FileInputStream(
+                "./src/test/resources/DDT/Day6_testcase1.xlsx");
+
+        Workbook w = WorkbookFactory.create(f1);
+
+        String first_name = w.getSheet("Sheet1")
+                .getRow(1).getCell(0).getStringCellValue();
+
+        System.out.println(first_name);
+
+        String middle_name = w.getSheet("Sheet1")
+                .getRow(1).getCell(1).getStringCellValue();
+
+        System.out.println(middle_name);
+
+        String last_name = w.getSheet("Sheet1")
+                .getRow(1).getCell(2).getStringCellValue();
+
+        System.out.println(last_name);
+
+        String eid = w.getSheet("Sheet1")
+                .getRow(1).getCell(3).getStringCellValue();
+
+        System.out.println(eid);
+
+        String user_name = w.getSheet("Sheet1")
+                .getRow(1).getCell(4).getStringCellValue();
+
+        System.out.println(user_name);
+
+        String password = w.getSheet("Sheet1")
+                .getRow(1).getCell(5).getStringCellValue();
+
+        System.out.println(password);
+
+        String confirm_pw = w.getSheet("Sheet1")
+                .getRow(1).getCell(6).getStringCellValue();
+
+        System.out.println(confirm_pw);
+
+        w.close();
+        f1.close();
+
+        // Launch browser
+        WebDriver driver = null;
+
+        if (browser.equalsIgnoreCase("chrome")) {
+            driver = new ChromeDriver();
+        }
+
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
+
+        // Login to application
+        driver.get(url);
+
+        driver.findElement(By.name("username")).sendKeys(un);
+
+        driver.findElement(By.name("password")).sendKeys(pw);
+
+        driver.findElement(By.xpath("//button[text()=' Login ']")).click();
+
+        // Click PIM
+        driver.findElement(By.linkText("PIM")).click();
+
+        // Click Add Employee
+        driver.findElement(
+                By.xpath("//button[@class='oxd-button oxd-button--medium oxd-button--secondary']")
+        ).click();
+
+        // Enter employee details
+        driver.findElement(By.name("firstName")).sendKeys(first_name);
+
+        driver.findElement(By.name("middleName")).sendKeys(middle_name);
+
+        driver.findElement(By.name("lastName")).sendKeys(last_name);
+
+        // Employee ID
+        WebElement empid = driver.findElement(
+                By.xpath("//label[text()='Employee Id']/ancestor::div[contains(@class,'oxd-input-group')]/descendant::input")
+        );
+
+        empid.sendKeys(Keys.CONTROL, "a");
+        empid.sendKeys(Keys.BACK_SPACE);
+        empid.sendKeys(eid);
+
+        // Enable Create Login Details
+        driver.findElement(
+                By.xpath("//span[@class='oxd-switch-input oxd-switch-input--active --label-right']")
+        ).click();
+
+        // Username
+        driver.findElement(
+                By.xpath("//label[text()='Username']/ancestor::div[contains(@class,'oxd-input-group')]/descendant::input")
+        ).sendKeys(user_name);
+
+        // Password
+        driver.findElement(
+                By.xpath("//div[contains(@class,'user-password-cell')]//input[@type='password']")
+        ).sendKeys(password);
+
+        // Confirm Password
+        driver.findElement(
+                By.xpath("//label[text()='Confirm Password']/ancestor::div[contains(@class,'oxd-input-group')]/descendant::input")
+        ).sendKeys(confirm_pw);
+
+        // Save employee
+        driver.findElement(
+                By.xpath("//button[text()=' Save ']")
+        ).click();
+
+        // Click Admin
+        driver.findElement(By.linkText("Admin")).click();
+
+        // Enter username in Admin search
+        driver.findElement(
+                By.xpath("//label[text()='Username']/ancestor::div[contains(@class,'oxd-input-group')]/descendant::input")
+        ).sendKeys(user_name);
+
+        // Select User Role
+        driver.findElement(
+                By.xpath("//label[text()='User Role']/ancestor::div[contains(@class,'oxd-input-group')]/descendant::div[contains(@class,'oxd-select-text')]")
+        ).click();
+
+        driver.findElement(
+                By.xpath("//div[@role='option']//span[text()='Admin']")
+        ).click();
+
+        // Enter employee name
+        driver.findElement(
+                By.xpath("//input[@placeholder='Type for hints...']")
+        ).sendKeys(first_name);
+
+        // Select Enabled status
+        driver.findElement(
+                By.xpath("//label[text()='Status']/ancestor::div[contains(@class,'oxd-input-group')]/descendant::div[contains(@class,'oxd-select-text')]")
+        ).click();
+
+        driver.findElement(
+                By.xpath("//div[@role='option']//span[text()='Enabled']")
+        ).click();
+
+        // Search employee
+        driver.findElement(
+                By.xpath("//button[text()=' Search ']")
+        ).click();
+
+        // Verify employee is present
+        boolean userPresent = driver.findElements(
+                By.xpath("//div[@role='row']//div[@role='cell' and normalize-space()='" + user_name + "']")
+        ).size() > 0;
+
+        if (userPresent) {
+            System.out.println("PASS: User is present");
+        } else {
+            System.out.println("FAIL: User is not present");
+        }
+
+        driver.quit();
+    }
+}
