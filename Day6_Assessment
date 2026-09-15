@@ -1,4 +1,4 @@
-package testcase1;
+package assessments;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -13,13 +13,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-public class Day6_testcase1 {
+public class OrangeHRMTestCase {
 
     public static void main(String[] args) throws IOException {
 
         // Reading data from properties file
         FileInputStream f = new FileInputStream(
-                "./src/test/resources/DDT/Day6_testcase1.properties");
+                "./src/test/resources/orangeHRM.properties");
 
         Properties p = new Properties();
         p.load(f);
@@ -38,7 +38,7 @@ public class Day6_testcase1 {
 
         // Reading data from Excel file
         FileInputStream f1 = new FileInputStream(
-                "./src/test/resources/DDT/Day6_testcase1.xlsx");
+                "./src/test/resources/TestDatafile.xlsx");
 
         Workbook w = WorkbookFactory.create(f1);
 
